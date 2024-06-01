@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Details</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        input[type="text"] { margin-bottom: 20px; padding: 8px; width: calc(100% - 22px); }
+        button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Customer Details</h2>
+
+    <form id="searchForm">
+        <input type="text" id="searchInput" placeholder="Enter search term">
+        <button type="submit">Search</button>
+        <button type="button" onclick="printTable()">Print</button>
+    </form>
+
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>Customer ID</th>
+                <th>Customer Name</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Product Details</th>
+                <th>SL Number</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        const sheetId = '1drFrBEdMlzn1VoBp6gAeQWg_9cBGp4xN0ne_I5gZPbA';
+        const apiKey = 'AIzaSyDhT3l7hQXQSOzOscEk4R7Edz57ec6VF0Q';
+        const range = 'Sheet2!A2:F1000';
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
+
+        let allData = [];
+
+        function fetchData() {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    allData = data.values;
+                    displayData(allData);
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function displayData(data) {
+            const tableBody = document.querySelector('#data-table tbody');
+            tableBody.innerHTML = '';
+            data.forEach(row => {
+                const tableRow = document.createElement('tr');
+                row.forEach(cell => {
+                    const tableCell = document.createElement('td');
+                    tableCell.textContent = cell;
+                    tableRow.appendChild(tableCell);
+                });
+                tableBody.appendChild(tableRow);
+            });
+        }
+
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filteredData = allData.filter(row => row.some(cell => cell.toLowerCase().includes(searchTerm)));
+            displayData(filteredData);
+        });
+
+        function printTable() {
+            const printContents = document.getElementById('data-table').outerHTML;
+            const originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            window.location.reload();
+        }
+
+        fetchData();
+    </script>
+</body>
+</html>
