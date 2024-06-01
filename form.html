@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base target="_top">
+    <title>Product Installation Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { max-width: 500px; margin: auto; }
+        input, textarea { width: 100%; margin-bottom: 10px; padding: 8px; }
+        button { padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:disabled { background-color: #888; }
+    </style>
+</head>
+<body>
+    <h2>Product Installation Form</h2>
+    <form id="installationForm">
+        <label for="customerName">Customer Name</label>
+        <input type="text" id="customerName" name="customerName" required>
+
+        <label for="address">Address</label>
+        <textarea id="address" name="address" required></textarea>
+
+        <label for="phoneNumber">Phone Number</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" required>
+
+        <label for="productDetails">Product Details</label>
+        <textarea id="productDetails" name="productDetails" required></textarea>
+
+        <label for="slNumber">SL Number of the Product</label>
+        <input type="text" id="slNumber" name="slNumber" required>
+
+        <label for="installationDate">Installation Date</label>
+        <input type="date" id="installationDate" name="installationDate" required>
+
+        <button type="submit" id="submitButton">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById('installationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var submitButton = document.getElementById('submitButton');
+            submitButton.disabled = true;
+
+            var formData = new FormData(e.target);
+            var formObject = {};
+            formData.forEach((value, key) => { formObject[key] = value });
+
+            var jsonFormData = JSON.stringify(formObject);
+
+            fetch('https://script.google.com/macros/s/AKfycbwP_IzZsWRT3iFHx7C7Olbu-a5hC3JoFw-8rYTWSr209ZJ9GounC0CuFuf8x1c_t5Do/exec', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                body: jsonFormData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'SUCCESS') {
+                    alert('Form submitted successfully!');
+                    e.target.reset();
+                } else {
+                    alert('Failed to submit form');
+                }
+                submitButton.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error submitting form: ' + error.message);
+                submitButton.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
