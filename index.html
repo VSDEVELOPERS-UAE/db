@@ -3,16 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        form { max-width: 300px; margin: auto; }
-        input { width: 100%; margin-bottom: 10px; padding: 8px; }
-        button { padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        form { 
+            max-width: 300px; 
+            width: 100%;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        input { 
+            width: 100%; 
+            margin-bottom: 10px; 
+            padding: 12px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+        }
+        button { 
+            padding: 12px; 
+            background-color: #4CAF50; 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+            border-radius: 4px; 
+            width: 100%;
+        }
+        button:disabled { 
+            background-color: #888; 
+        }
+        @media (max-width: 400px) {
+            form { 
+                margin: 10px;
+                padding: 15px;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+            button {
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 <body>
-    <h2>Login</h2>
     <form id="loginForm">
+        <h2>Login</h2>
         <label for="username">Username</label>
         <input type="text" id="username" name="username" required>
 
