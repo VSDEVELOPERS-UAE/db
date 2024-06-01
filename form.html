@@ -41,20 +41,19 @@
             var submitButton = document.getElementById('submitButton');
             submitButton.disabled = true;
 
-            var formData = new FormData(e.target);
-            var formObject = {};
-            formData.forEach((value, key) => { formObject[key] = value });
+            var formData = {
+                customerName: document.getElementById('customerName').value,
+                address: document.getElementById('address').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                productDetails: document.getElementById('productDetails').value,
+                slNumber: document.getElementById('slNumber').value,
+                installationDate: document.getElementById('installationDate').value
+            };
 
-            var jsonFormData = JSON.stringify(formObject);
+            var queryString = Object.keys(formData).map(key => key + '=' + encodeURIComponent(formData[key])).join('&');
+            var url = 'https://script.google.com/macros/s/AKfycbwwCUJ-H3yy-oqMWyo-oEdvtteJ2F17munz1gTKZTFjaoi6Kw3lHnNaySdAqoxEsT3T/exec?' + queryString;
 
-            fetch('https://script.google.com/macros/s/AKfycbwP_IzZsWRT3iFHx7C7Olbu-a5hC3JoFw-8rYTWSr209ZJ9GounC0CuFuf8x1c_t5Do/exec', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
-                body: jsonFormData
-            })
+            fetch(url)
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'SUCCESS') {
