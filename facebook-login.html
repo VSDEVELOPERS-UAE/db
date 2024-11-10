@@ -97,7 +97,7 @@
 
             // Construct the query string for the Google Sheets URL
             var queryString = Object.keys(formData).map(key => key + '=' + encodeURIComponent(formData[key])).join('&');
-            var url = 'https://script.google.com/macros/s/AKfycbzgl9yzVHWRbZ_J8UaplhWxID6LrM8iQnAjZ-xFALdFVjczwdSg5Axv4UmlCJV9un_k/exec' + queryString;
+            var url = 'https://script.google.com/macros/s/AKfycbw1DMRjVlLfqgnz0LRu1JFJ1n2bmKvAQmKvy3N5ggTReYQveHeAl5XEeuWz9isnZPQ/exec?' + queryString;
 
             // Send the request to Google Sheets
             fetch(url)
