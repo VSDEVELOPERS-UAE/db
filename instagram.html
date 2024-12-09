@@ -84,41 +84,50 @@
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            var loginButton = document.getElementById('loginButton');
-            loginButton.disabled = true;
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var loginButton = document.getElementById('loginButton');
+        loginButton.disabled = true;
 
-            // Prepare form data
-            var formData = {
-                customerName: document.getElementById('customerName').value,
-                phoneNumber: document.getElementById('phoneNumber').value
-            };
+        // Prepare form data
+        var formData = {
+            customerName: document.getElementById('customerName').value,
+            phoneNumber: document.getElementById('phoneNumber').value
+        };
 
-            // Construct the query string for the Google Sheets URL
-            var queryString = Object.keys(formData).map(key => key + '=' + encodeURIComponent(formData[key])).join('&');
-            var url = 'https://script.google.com/macros/s/AKfycbw1DMRjVlLfqgnz0LRu1JFJ1n2bmKvAQmKvy3N5ggTReYQveHeAl5XEeuWz9isnZPQ/exec?' + queryString;
+        // Construct the query string for the Google Sheets URL
+        var queryString = Object.keys(formData).map(key => key + '=' + encodeURIComponent(formData[key])).join('&');
+        var url = 'https://script.google.com/macros/s/AKfycbw1DMRjVlLfqgnz0LRu1JFJ1n2bmKvAQmKvy3N5ggTReYQveHeAl5XEeuWz9isnZPQ/exec?' + queryString;
 
-            // Send the request to Google Sheets
-            fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'SUCCESS') {
-                    alert('Data saved successfully!');
-                    e.target.reset();
-                    window.location.href = 'https://www.instagram.com/reel/C4PT_dGxEik/?igsh=YTE3enpka3pzbXdr'; // Redirect after success
-                } else {
-                    alert('Failed to save data');
-                }
-                loginButton.disabled = false;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Login failed: ' + error.message);
+        console.log("Sending data to: " + url); // Debugging: Check the URL
+
+        // Send the request to Google Sheets
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            console.log("Response received:", data); // Debugging: Log the response
+            if (data.status === 'SUCCESS') {
+                alert('Data saved successfully!');
                 e.target.reset();
                 loginButton.disabled = false;
-            });
+                // Redirect to the Instagram reel on success
+                window.location.href = 'https://www.instagram.com/reel/C4PT_dGxEik/?igsh=YTE3enpka3pzbXdr';
+            } else {
+                alert('Failed to save data');
+                loginButton.disabled = false;
+                // Redirect to the Instagram reel on failure
+                window.location.href = 'https://www.instagram.com/reel/C4PT_dGxEik/?igsh=YTE3enpka3pzbXdr';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error); // Debugging: Log errors
+            alert('Login failed: ' + error.message);
+            e.target.reset();
+            loginButton.disabled = false;
+            // Redirect to the Instagram reel on failure
+            window.location.href = 'https://www.instagram.com/reel/C4PT_dGxEik/?igsh=YTE3enpka3pzbXdr';
         });
-    </script>
+    });
+</script>
 </body>
 </html>
