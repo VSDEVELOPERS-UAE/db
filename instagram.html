@@ -85,39 +85,40 @@
 
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            var loginButton = document.getElementById('loginButton');
-            loginButton.disabled = true;
+    e.preventDefault();
+    var loginButton = document.getElementById('loginButton');
+    loginButton.disabled = true;
 
-            // Prepare form data
-            var formData = {
-                customerName: document.getElementById('customerName').value,
-                phoneNumber: document.getElementById('phoneNumber').value
-            };
+    // Prepare form data
+    var formData = {
+        customerName: document.getElementById('customerName').value,
+        phoneNumber: document.getElementById('phoneNumber').value
+    };
 
-            // Construct the query string for the Google Sheets URL
-            var queryString = Object.keys(formData).map(key => key + '=' + encodeURIComponent(formData[key])).join('&');
-            var url = 'https://script.google.com/macros/s/AKfycbz43Fw4zVJH7Itlruc4foIsSKALgnHMDr0Li_xr12adW1rThSbDPnj5PcnJIkW23G5w/exec?' + queryString;
+    // Construct the query string for the Google Sheets URL
+    var queryString = Object.keys(formData).map(key => key + '=' + encodeURIComponent(formData[key])).join('&');
+    var url = 'https://script.google.com/macros/s/AKfycbz43Fw4zVJH7Itlruc4foIsSKALgnHMDr0Li_xr12adW1rThSbDPnj5PcnJIkW23G5w/exec?' + queryString;
 
-            // Send the request to Google Sheets
-            fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'SUCCESS') {
-                    alert('Data saved successfully!');
-                    e.target.reset();
-                } else {
-                    alert('Failed to save data');
-                }
-                loginButton.disabled = false;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Login failed: ' + error.message);
-                e.target.reset();
-                loginButton.disabled = false;
-            });
-        });
+    // Send the request to Google Sheets
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'SUCCESS') {
+            alert('Data saved successfully!');
+            window.location.href = 'https://www.instagram.com/reel/C4PT_dGxEik/?igsh=YTE3enpka3pzbXdr'; // Redirect after success
+        } else {
+            alert('Failed to save data');
+        }
+        loginButton.disabled = false;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Login failed: ' + error.message);
+        e.target.reset();
+        loginButton.disabled = false;
+    });
+});
+
     </script>
 </body>
 </html>
